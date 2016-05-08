@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Repoxplorer by morucci</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Repoxplorer</h1>
+      <h2 class="project-tagline">RepoXplorer is a small stats and charts utility for GIT repositories</h2>
+      <a href="https://github.com/morucci/repoxplorer" class="btn">View on GitHub</a>
+      <a href="https://github.com/morucci/repoxplorer/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/morucci/repoxplorer/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="repoxplorer" class="anchor" href="#repoxplorer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>RepoXplorer</h1>
+
+<p>RepoXplorer is a small stats and charts utility for GIT repositories.
+Its main purpose is to ease the visualization of stats for one or
+more projects.</p>
+
+<p>As lot of projects are composed of multiple sub-projects (server, client,
+libraries). RepoXplorer let's you define how a project is composed and
+then compute stats across multiple sub-projects.</p>
+
+<p>Furthermore it is possible to define author identities by listing
+author' emails and then avoid duplicated author in computed stats.</p>
+
+<p>RepoXplorer rely on ElasticSearch and Pecan. Once the service is
+started only a web browser is needed to access the user interface.</p>
+
+<h2>
+<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h2>
+
+<p>First install repoxplorer in a virtualenv.</p>
+
+<div class="highlight highlight-source-shell"><pre>virtualenv <span class="pl-k">~</span>/repoxplorer
+<span class="pl-c1">.</span> <span class="pl-k">~</span>/repoxplorer/bin/activate
+pip install -r requirements.txt
+python setup.py install</pre></div>
+
+<p>Install Elasticsearch. Here we use an already "ready to use" Docker
+container.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">~</span>/repoxplorer/bin/el-start.sh</pre></div>
+
+<p>Start the RepoXplorer web app.</p>
+
+<div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>repoxplorer/local/share/repoxplorer/config.py</pre></div>
+
+<h2>
+<a id="index-a-project" class="anchor" href="#index-a-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Index a project</h2>
+
+<p>A yaml file should be provisioned with the projects you want to index. The
+file $prefix/local/share/repoxplorer/projects.yaml is expected to be found.</p>
+
+<p>Below is the default projects.yaml files provided. Note that Barbican project
+is composed of two sub-projects: the server and the client.</p>
+
+<p>Edit this file to add projects you want to index.
+~repoxplorer/local/share/repoxplorer/projects.yaml.</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
+<span class="pl-s">- <span class="pl-ent">Barbican:</span></span>
+   <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">barbican</span></span>
+     <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/barbican</span></span>
+     <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span>
+   <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">python-barbicanclient</span></span>
+     <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/python-barbicanclient</span></span>
+     <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span></pre></div>
+
+<p>Then start the GIT indexer manually or configure CRON job. The indexer
+will read the projects.yaml file and will index project' commits in the
+ElasticSearch DB.</p>
+
+<div class="highlight highlight-source-shell"><pre>python <span class="pl-k">~</span>repoxplorer/bin/repoxplorer-indexer</pre></div>
+
+<h2>
+<a id="sanitize-author-identities" class="anchor" href="#sanitize-author-identities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sanitize author identities</h2>
+
+<p>In the example below all contributions for John Doe will be stacked if
+the author email field of the GIT commit object is one of the defined
+emails.</p>
+
+<p>Edit ~repoxplorer/local/share/repoxplorer/idents.yaml</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
+<span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">John Doe</span></span>
+  <span class="pl-s"><span class="pl-ent">emails:</span></span>
+    <span class="pl-s">- <span class="pl-s">john.doe@server</span></span>
+    <span class="pl-s">- <span class="pl-s">jdoe@server</span></span></pre></div>
+
+<h2>
+<a id="run-tests" class="anchor" href="#run-tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Run tests</h2>
+
+<div class="highlight highlight-source-shell"><pre>tox</pre></div>
+
+<h2>
+<a id="contribute" class="anchor" href="#contribute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribute</h2>
+
+<p>RepoXplorer is new and should be considered Alpha ! Feel free to help !
+Look at the feature requests list on the Github issue tracker.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/morucci/repoxplorer">Repoxplorer</a> is maintained by <a href="https://github.com/morucci">morucci</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
