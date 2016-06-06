@@ -39,8 +39,7 @@ started only a web browser is needed to access the user interface.</p>
 <h2>
 <a id="a-visual-overview-of-the-user-interface" class="anchor" href="#a-visual-overview-of-the-user-interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A visual overview of the user interface</h2>
 
-<p><img src="https://raw.githubusercontent.com/morucci/repoxplorer/master/imgs/repoxplorer_capt1.png" alt="capture 1">
-<img src="https://raw.githubusercontent.com/morucci/repoxplorer/master/imgs/repoxplorer_capt2.png" alt="capture 2"></p>
+<p><img src="https://raw.githubusercontent.com/morucci/repoxplorer/master/imgs/repoxplorer.jpg" alt="capture 1"></p>
 
 <h2>
 <a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h2>
@@ -78,9 +77,11 @@ is composed of two sub-projects: the server and the client.</p>
    <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">barbican</span></span>
      <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/barbican</span></span>
      <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span>
+     <span class="pl-s"><span class="pl-ent">gitweb:</span> <span class="pl-s">https://github.com/openstack/barbican/commit/%(sha)s</span></span>
    <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">python-barbicanclient</span></span>
      <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/python-barbicanclient</span></span>
-     <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span></pre></div>
+     <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span>
+     <span class="pl-s"><span class="pl-ent">gitweb:</span> <span class="pl-s">https://github.com/openstack/python-barbicanclient/commit/%(sha)s</span></span></pre></div>
 
 <p>Then start the GIT indexer manually or configure CRON job. The indexer
 will read the projects.yaml file and will index project' commits in the
@@ -112,7 +113,17 @@ emails.</p>
 <a id="contribute" class="anchor" href="#contribute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribute</h2>
 
 <p>RepoXplorer is new and should be considered Alpha ! Feel free to help !
-Look at the feature requests list on the Github issue tracker.</p>
+Look at the feature requests list on the Github issue tracker:</p>
+
+<ul>
+<li><a href="https://github.com/morucci/repoxplorer/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement">Feature requests</a></li>
+</ul>
+
+<p>If you find an issue please fill a bug report here:</p>
+
+<ul>
+<li><a href="https://github.com/morucci/repoxplorer/issues/new">Report an issue</a></li>
+</ul>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/morucci/repoxplorer">Repoxplorer</a> is maintained by <a href="https://github.com/morucci">morucci</a>.</span>
