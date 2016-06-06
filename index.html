@@ -58,7 +58,7 @@ container.</p>
 
 <p>Start the RepoXplorer web app.</p>
 
-<div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>repoxplorer/local/share/repoxplorer/config.py</pre></div>
+<div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>/repoxplorer/local/share/repoxplorer/config.py</pre></div>
 
 <h2>
 <a id="index-a-project" class="anchor" href="#index-a-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Index a project</h2>
@@ -70,7 +70,7 @@ file $prefix/local/share/repoxplorer/projects.yaml is expected to be found.</p>
 is composed of two sub-projects: the server and the client.</p>
 
 <p>Edit this file to add projects you want to index.
-~repoxplorer/local/share/repoxplorer/projects.yaml.</p>
+~/repoxplorer/local/share/repoxplorer/projects.yaml.</p>
 
 <div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
 <span class="pl-s">- <span class="pl-ent">Barbican:</span></span>
@@ -87,7 +87,7 @@ is composed of two sub-projects: the server and the client.</p>
 will read the projects.yaml file and will index project' commits in the
 ElasticSearch DB.</p>
 
-<div class="highlight highlight-source-shell"><pre>python <span class="pl-k">~</span>repoxplorer/bin/repoxplorer-indexer</pre></div>
+<div class="highlight highlight-source-shell"><pre>python <span class="pl-k">~</span>/repoxplorer/bin/repoxplorer-indexer</pre></div>
 
 <h2>
 <a id="sanitize-author-identities" class="anchor" href="#sanitize-author-identities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sanitize author identities</h2>
@@ -96,7 +96,7 @@ ElasticSearch DB.</p>
 the author email field of the GIT commit object is one of the defined
 emails.</p>
 
-<p>Edit ~repoxplorer/local/share/repoxplorer/idents.yaml</p>
+<p>Edit ~/repoxplorer/local/share/repoxplorer/idents.yaml</p>
 
 <div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
 <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">John Doe</span></span>
