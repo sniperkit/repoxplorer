@@ -52,16 +52,13 @@ pip install -r requirements.txt
 python setup.py install</pre></div>
 
 <p>Install Elasticsearch. Here we use an already "ready to use" Docker
-container.</p>
+container. But you should definitely use a regular installation
+of ElasticSearch.</p>
 
 <div class="highlight highlight-source-shell"><pre><span class="pl-k">~</span>/repoxplorer/bin/el-start.sh</pre></div>
 
-<p>Start the RepoXplorer web app.</p>
-
-<div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>/repoxplorer/local/share/repoxplorer/config.py</pre></div>
-
 <h2>
-<a id="index-a-project" class="anchor" href="#index-a-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Index a project</h2>
+<a id="how-to-index-a-list-of-git-hosted-projects" class="anchor" href="#how-to-index-a-list-of-git-hosted-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to index a list of GIT hosted projects</h2>
 
 <p>A yaml file should be provisioned with the projects you want to index. The
 file $prefix/local/share/repoxplorer/projects.yaml is expected to be found.</p>
@@ -83,11 +80,49 @@ is composed of two sub-projects: the server and the client.</p>
      <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span>
      <span class="pl-s"><span class="pl-ent">gitweb:</span> <span class="pl-s">https://github.com/openstack/python-barbicanclient/commit/%(sha)s</span></span></pre></div>
 
-<p>Then start the GIT indexer manually or configure CRON job. The indexer
-will read the projects.yaml file and will index project' commits in the
-ElasticSearch DB.</p>
+<p>Then start the GIT indexer manually.</p>
 
 <div class="highlight highlight-source-shell"><pre>python <span class="pl-k">~</span>/repoxplorer/bin/repoxplorer-indexer</pre></div>
+
+<p>In order to run the indexer continuously you can use the command
+argument "--forever".</p>
+
+<p>Furthermore you can install the systemd unit file for the indexer.</p>
+
+<pre><code>sudo cp etc/repoxplorer.service /usr/lib/systemd/system/repoxplorer.service
+# Be sure to set the correct path to the repoxplorer-indexer script
+
+sudo systemctl daemon-reload
+sudo systemctl start repoxplorer
+sudo systemctl status repoxplorer
+
+# You can check the indexer log via journalctl
+sudo journalctl -f
+</code></pre>
+
+<h2>
+<a id="start-the-web-ui" class="anchor" href="#start-the-web-ui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Start the Web UI</h2>
+
+<p>Start the RepoXplorer web app.</p>
+
+<div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>/repoxplorer/local/share/repoxplorer/config.py</pre></div>
+
+<p>Then open a Web browser to access http://localhost:8080. You will be faced a list
+of projects such as defined in projects.yaml. A click on one of the project's ids
+will redirect you to the statistics page of the given project.</p>
+
+<p>Furthermore you can install the systemd unit file for the webui.</p>
+
+<pre><code>sudo cp etc/repoxplorer-webui.service /usr/lib/systemd/system/repoxplorer-webui.service
+# Be sure to set the correct path to the uwsgi tool and to the config.py file.
+
+sudo systemctl daemon-reload
+sudo systemctl start repoxplorer-webui
+sudo systemctl status repoxplorer-webui
+
+# You can check the webui log via journalctl
+sudo journalctl -f
+</code></pre>
 
 <h2>
 <a id="sanitize-author-identities" class="anchor" href="#sanitize-author-identities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sanitize author identities</h2>
