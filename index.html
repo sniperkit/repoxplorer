@@ -24,17 +24,17 @@
 
 <p>RepoXplorer is a small stats and charts utility for GIT repositories.
 Its main purpose is to ease the visualization of stats for one or
-more projects.</p>
+more project(s) composed of multiple GIT repositories.</p>
 
-<p>As lot of projects are composed of multiple sub-projects (server, client,
-libraries). RepoXplorer let's you define how a project is composed and
-then compute stats across multiple sub-projects.</p>
+<p>As lot of projects are composed of multiple GIT repositories (server,
+client, libraries). RepoXplorer let's you describe how a project is composed
+and then computes stats across multiple GIT repositories.</p>
 
 <p>Furthermore it is possible to define author identities by listing
-author' emails and then avoid duplicated author in computed stats.</p>
+author emails and then avoid duplicated authors in computed stats.</p>
 
-<p>RepoXplorer relies on ElasticSearch and Pecan. Once the service is
-started only a web browser is needed to access the user interface.</p>
+<p>RepoXplorer relies on ElasticSearch. Once the service is started only
+a web browser is needed to access the user interface.</p>
 
 <h2>
 <a id="a-visual-overview-of-the-user-interface" class="anchor" href="#a-visual-overview-of-the-user-interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A visual overview of the user interface</h2>
@@ -64,24 +64,32 @@ of ElasticSearch.</p>
 file $prefix/local/share/repoxplorer/projects.yaml is expected to be found.</p>
 
 <p>Below is the default projects.yaml files provided. Note that Barbican project
-is composed of two sub-projects: the server and the client.</p>
+is composed of two GIT repositories: the server and the client.</p>
+
+<p>A list of tags can be given to each GIT repositories. This tag notion
+should not be concidered as GIT tags but only as a way to group
+GIT repositories.</p>
 
 <p>Edit this file to add projects you want to index.
 ~/repoxplorer/local/share/repoxplorer/projects.yaml.</p>
 
-<div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
-<span class="pl-s"><span class="pl-ent">templates:</span></span>
-<span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">default</span></span>
-  <span class="pl-s"><span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/%(name)s</span></span>
-  <span class="pl-s"><span class="pl-ent">branch:</span> <span class="pl-s">master</span></span>
-  <span class="pl-s"><span class="pl-ent">gitweb:</span> <span class="pl-s">https://github.com/openstack/%(name)s/commit/%%(sha)s</span></span>
+<div class="highlight highlight-source-yaml"><pre>---
+<span class="pl-ent">templates:</span>
+- <span class="pl-ent">name:</span> <span class="pl-s">default</span>
+  <span class="pl-ent">uri:</span> <span class="pl-s">https://github.com/openstack/%(name)s</span>
+  <span class="pl-ent">branch:</span> <span class="pl-s">master</span>
+  <span class="pl-ent">gitweb:</span> <span class="pl-s">https://github.com/openstack/%(name)s/commit/%%(sha)s</span>
 
-<span class="pl-s"><span class="pl-ent">projects:</span></span>
-  <span class="pl-s"><span class="pl-ent">Barbican:</span></span>
-  <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">barbican</span></span>
-    <span class="pl-s"><span class="pl-ent">template:</span> <span class="pl-s">default</span></span>
-  <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">python-barbicanclient</span></span>
-    <span class="pl-s"><span class="pl-ent">template:</span> <span class="pl-s">default</span></span></pre></div>
+<span class="pl-ent">projects:</span>
+  <span class="pl-ent">Barbican:</span>
+  - <span class="pl-ent">name:</span> <span class="pl-s">barbican</span>
+    <span class="pl-ent">tags:</span>
+      - <span class="pl-s">python</span>
+    <span class="pl-ent">template:</span> <span class="pl-s">default</span>
+  - <span class="pl-ent">name:</span> <span class="pl-s">python-barbicanclient</span>
+    <span class="pl-ent">tags:</span>
+      - <span class="pl-s">python</span>
+    <span class="pl-ent">template:</span> <span class="pl-s">default</span></pre></div>
 
 <p>Then start the GIT indexer manually.</p>
 
@@ -110,7 +118,7 @@ sudo journalctl -f
 
 <div class="highlight highlight-source-shell"><pre>uwsgi --http-socket :8080 --pecan <span class="pl-k">~</span>/repoxplorer/local/share/repoxplorer/config.py</pre></div>
 
-<p>Then open a Web browser to access http://localhost:8080. You will be faced a list
+<p>Then open a Web browser to access http://localhost:8080. You will be faced to a list
 of projects such as defined in projects.yaml. A click on one of the project's ids
 will redirect you to the statistics page of the given project.</p>
 
@@ -136,11 +144,11 @@ emails.</p>
 
 <p>Edit ~/repoxplorer/local/share/repoxplorer/idents.yaml</p>
 
-<div class="highlight highlight-source-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
-<span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">John Doe</span></span>
-  <span class="pl-s"><span class="pl-ent">emails:</span></span>
-    <span class="pl-s">- <span class="pl-s">john.doe@server</span></span>
-    <span class="pl-s">- <span class="pl-s">jdoe@server</span></span></pre></div>
+<div class="highlight highlight-source-yaml"><pre>---
+- <span class="pl-ent">name:</span> <span class="pl-s">John Doe</span>
+  <span class="pl-ent">emails:</span>
+    - <span class="pl-s">john.doe@server</span>
+    - <span class="pl-s">jdoe@server</span></pre></div>
 
 <h2>
 <a id="run-tests" class="anchor" href="#run-tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Run tests</h2>
