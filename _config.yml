@@ -1,0 +1,8 @@
+title: RepoXplorer
+description: RepoXplorer is a small stats and charts utility for GIT repositories
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
